@@ -1,11 +1,15 @@
+import string
+
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 from gensim import corpora, models
 import networkx as nx
+from transformers import pipeline
 from data_preprocessing import *
 
 MYPATH = "datasets/"
 RATIO = 1 / 60  # a movie trailer usually 1.5 mins out of 90 mins movie (~ 1/60 ratio)
+TRANSFORMER_LIMIT = 512  # processing limit for the transformer model type
 
 
 def pagerank_summarizer(embeddings: Dict, transcript: str):
@@ -73,6 +77,39 @@ def lda_summarizer(transcript: str) -> str:
         important_sentences.append(most_important_sentence)
 
     summary = " ".join([important_sentences[i] for i in range(lda_topics)])
+    return summary
+
+
+def transformer_summarizer(transcript: str) -> src:
+    summarizer = pipeline("summarization")
+
+    word_tokens = word_tokenize(transcript)
+    total_N = len(word_tokens)
+    num_bins = int(total_N / TRANSFORMER_LIMIT)
+    left = 0
+    tmp_summaries = []
+
+    # break the transcript to multiple batch of sentences (paragraphs)
+    # using window method of two cursors
+    for i in range(num_bins):
+        right = (i + 1) * TRANSFORMER_LIMIT if i + 1 < num_bins else total_N - 1
+
+        # only split the string if the sentence completes.
+        while word_tokens[right][-1] not in "?!.":
+            right -= 1
+            if word_tokens[right][-1] in "?!." and TRANSFORMER_LIMIT * 2 - (right - left) < 100:
+                right -= 1
+        text_len = right - left
+        sub_string = "".join([" "+i if not i.startswith("'")
+                              and i not in string.punctuation else i
+                              for i in word_tokens[left:right+1]]).strip()
+
+        # after trying 1/60, most of the summaries make no sense
+        # so increase the limit for the returned tokens
+        tmp_summaries.append(summarizer(sub_string, min_length=int(text_len / 45), max_length=int(text_len / 30)))
+        left = right + 1
+
+    summary = ". ".join([summary[0]['summary_text'] for summary in tmp_summaries])
     return summary
 
 
