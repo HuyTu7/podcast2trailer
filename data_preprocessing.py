@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 
 
 def read_data(mypath: str) -> Dict:
+    # read json data files
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     examples = {}
     for fname in onlyfiles:
@@ -27,6 +28,7 @@ def rm_stopwords_from_text(text: str) -> str:
 
 
 def load_word_embeddings() -> Dict:
+    #load pretrained Glove embeddings
     word_embeddings = {}
     f = open('glove/glove.6B.300d.txt', encoding='utf-8')
     for line in f:
@@ -39,7 +41,11 @@ def load_word_embeddings() -> Dict:
 
 
 def preprocessing(sentences: List[str]):
+    # remove non-alphabetic tokens
     clean_sentences = pd.Series(sentences).str.replace("[^a-zA-Z]", " ")
+    # lower case
     clean_sentences = clean_sentences.str.lower()
+    # remove stop words
     clean_sentences = clean_sentences.apply(rm_stopwords_from_text)
     return clean_sentences
+
