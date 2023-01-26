@@ -42,3 +42,6 @@ podcast2trailer/
 - networkx
 - sklearn
 - gensim
+- fastapi
+- uvicorn
+- jinja2
