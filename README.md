@@ -14,7 +14,7 @@ For both approaches, we tend to observe a movie trailer usually 1.5 minutes out 
 
 ### Example
 
-![](https://github.com/podcast2trailer/recording.gif)
+![](https://github.com/HuyTu7/podcast2trailer/recording.gif)
 
 
 ###  Repository Structure
