@@ -12,7 +12,13 @@ For more traditional machine learning approaches, LDA and PageRank are good cand
 
 For both approaches, we tend to observe a movie trailer usually 1.5 minutes out of 90 minutes movie, which approximates 1/60 ratio. For each transcription data point, we want to utilize this ratio to calculate the number of summarized sentences we need. 
 
-### Example
+### Prototype Example 
+
+After installing all the packages through `pip` you can run the below command. 
+
+```
+uvicorn main:app --reload
+```
 
 ![](https://github.com/HuyTu7/podcast2trailer/blob/main/recording.gif)
 
