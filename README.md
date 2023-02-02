@@ -14,7 +14,7 @@ For both approaches, we tend to observe a movie trailer usually 1.5 minutes out 
 
 ### Prototype Example 
 
-After installing all the packages through `pip` you can run the below command. 
+After installing all the packages through `pip` you can run the below command. This specifically uses FastAPI but we can Flask as well. 
 
 ```
 uvicorn main:app --reload
